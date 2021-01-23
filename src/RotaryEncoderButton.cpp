@@ -3,8 +3,9 @@
  Rotary Encoder Button - battery based
  Web software update service included
  WifiManager can be used to config wifi network
- 
+
  */
+#include <Arduino.h>
 #define ESP8266
 #include "BaseConfig.h"
 #include <ESP8266HTTPClient.h>
@@ -153,7 +154,7 @@ void loadConfig() {
 void rotaryStatus() {
 	String response;
 	int i;
-	
+
 	response = "<BR>elapsedTime:" + String(elapsedTime);
 	response += "<BR>sleepMask:" + String(sleepMask);
 	for(i=0; i<MAX_ENCODERS ;i++) {
@@ -264,9 +265,9 @@ void getFromURL(String url, int retryCount, char* user, char* password) {
 	int retries = retryCount;
 	int responseOK = 0;
 	int httpCode;
-	
+
 	Serial.println("get from " + url);
-	
+
 	while(retries > 0) {
 		cClient.begin(url);
 		httpCode = cClient.GET();
