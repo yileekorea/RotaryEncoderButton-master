@@ -17,7 +17,7 @@ const char* update_password = "password";
 //define actions during setup
 //define any call at start of set up
 #define SETUP_START 1
-//define config file name if used 
+//define config file name if used
 #define CONFIG_FILE "/rotaryEncoderConfig.txt"
 //set to 1 if SPIFFS or LittleFS used
 #define SETUP_FILESYS 1
@@ -31,9 +31,11 @@ const char* update_password = "password";
 
 //app specific
 #define AP_AUTHID "12345678"
-#define mqtt_server "192.168.0.100"
-#define mqtt_port 1883
-#define mqtt_user "homeassistant"
-#define mqtt_password "password"
+//#define mqtt_server "yjorgmqtt.ipecsacademia.site"
+#define mqtt_server "test.mosquitto.org"
+
+#define mqtt_port 8883
+#define mqtt_user "yimac"
+#define mqtt_password "yimac"
 
 #include "BaseSupport.h"

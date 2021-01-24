@@ -3,7 +3,7 @@
  Rotary Encoder Button - battery based
  Web software update service included
  WifiManager can be used to config wifi network
- 
+
  */
 #define ESP8266
 #include "BaseConfig.h"
@@ -13,6 +13,7 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <RotaryEncoderArray.h>
+#include <WiFiClientSecure.h>
 
 int timeInterval = 10;
 unsigned long noChangeTimeout = 30000;
@@ -28,8 +29,10 @@ unsigned long lastChangeTime;
 #define MQTT
 #define MQTT_RETRIES 5
 #ifdef MQTT
-	WiFiClient mClient;
-	PubSubClient mqttClient(mClient);
+//	WiFiClient mClient;
+//	PubSubClient mqttClient(mClient);
+  WiFiClientSecure mClient;             // Create client for MQTT
+  PubSubClient mqttClient(mClient);     // Create client for MQTT
 #endif
 
 HTTPClient cClient;
@@ -153,7 +156,7 @@ void loadConfig() {
 void rotaryStatus() {
 	String response;
 	int i;
-	
+
 	response = "<BR>elapsedTime:" + String(elapsedTime);
 	response += "<BR>sleepMask:" + String(sleepMask);
 	for(i=0; i<MAX_ENCODERS ;i++) {
@@ -176,13 +179,19 @@ void rotaryStatus() {
 void mqttConnect() {
 	// Loop until we're reconnected
 	int retries = 0;
+
+//  mClient.setInsecure();
+
 	while (!mqttClient.connected()) {
 		Serial.print("Attempting MQTT connection...");
 		// Attempt to connect
 		// If you do not want to use a username and password, change next line to
-		// if (mqttClient.connect("ESP8266mqttClient")) {
-		if (mqttClient.connect("ESP8266Client", mqtt_user, mqtt_password)) {
+		if (mqttClient.connect("ESP8266mqttClient")) {
+		//if (mqttClient.connect("ESP8266Client", mqtt_user, mqtt_password)) {
 			Serial.println("connected");
+      mqttClient.publish("/P_5CCF7F247FF8", "connected");
+      Serial.println("mqttClient.published");
+
 		} else {
 			Serial.print("failed, rc=");
 			Serial.print(mqttClient.state());
@@ -264,9 +273,9 @@ void getFromURL(String url, int retryCount, char* user, char* password) {
 	int retries = retryCount;
 	int responseOK = 0;
 	int httpCode;
-	
+
 	Serial.println("get from " + url);
-	
+
 	while(retries > 0) {
 		cClient.begin(url);
 		httpCode = cClient.GET();
@@ -343,7 +352,10 @@ void encoderChange(int encoder) {
 				makeActionString(encoder);
 				mqttClient.loop();
 				strncpy(tmpString, changePar1[encoder].c_str(), 32);
-				mqttClient.publish(tmpString, actionString.c_str(), true);
+        Serial.println(tmpString);
+        Serial.println("Rotary position = " + String(rotaryPosition[encoder]));
+//        mqttClient.publish(tmpString, actionString.c_str(), true);
+				mqttClient.publish(tmpString, String(rotaryPosition[encoder]).c_str(), true);
 			#endif
 			break;
 	}
@@ -411,7 +423,8 @@ void loop() {
 		WiFi.forceSleepBegin();
 		delaymSec(1000);
 		if(POWER_HOLD_PIN >=0) pinMode(POWER_HOLD_PIN, INPUT);
-		ESP.deepSleep(0);
+//    ESP.deepSleep(0);
+		ESP.deepSleep(10e6);
 	}
 	changed =0;
 	for(encoder = 0; encoder < MAX_ENCODERS; encoder++) {
