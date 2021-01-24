@@ -31,9 +31,8 @@ const char* update_password = "password";
 
 //app specific
 #define AP_AUTHID "12345678"
-//#define mqtt_server "yjorgmqtt.ipecsacademia.site"
-#define mqtt_server "test.mosquitto.org"
 
+#define mqtt_server "mqtt.ipecsacademia.site"
 #define mqtt_port 8883
 #define mqtt_user "yimac"
 #define mqtt_password "yimac"

@@ -187,8 +187,7 @@ void mqttConnect() {
 		Serial.print("Attempting MQTT connection...");
 		// Attempt to connect
 		// If you do not want to use a username and password, change next line to
-		if (mqttClient.connect("ESP8266mqttClient")) {
-		//if (mqttClient.connect("ESP8266Client", mqtt_user, mqtt_password)) {
+		if (mqttClient.connect("ESP8266Client", mqtt_user, mqtt_password)) {
 			Serial.println("connected");
       mqttClient.publish("/P_5CCF7F247FF8", "connected");
       Serial.println("mqttClient.published");
