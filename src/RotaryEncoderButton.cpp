@@ -32,7 +32,8 @@ unsigned long lastChangeTime;
 #ifdef MQTT
 //	WiFiClient mClient;
 //	PubSubClient mqttClient(mClient);
-  WiFiClientSecure mClient;             // Create client for MQTT
+  BearSSL::WiFiClientSecure mClient;
+//  WiFiClientSecure mClient;             // Create client for MQTT
   PubSubClient mqttClient(mClient);     // Create client for MQTT
 #endif
 
@@ -181,7 +182,7 @@ void mqttConnect() {
 	// Loop until we're reconnected
 	int retries = 0;
 
-//  mClient.setInsecure();
+  mClient.setInsecure();
 
 	while (!mqttClient.connected()) {
 		Serial.print("Attempting MQTT connection...");
