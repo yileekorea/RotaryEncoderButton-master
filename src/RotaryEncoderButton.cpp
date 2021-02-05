@@ -191,7 +191,7 @@ void mqttConnect() {
 		if (mqttClient.connect("ESP8266Client", mqtt_user, mqtt_password)) {
 			Serial.println("connected");
       mqttClient.publish("/P_5CCF7F247FF8", "connected");
-      Serial.println("mqttClient.published");
+      Serial.println("mqttClient.published..");
 
 		} else {
 			Serial.print("failed, rc=");
